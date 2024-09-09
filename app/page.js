@@ -1,18 +1,16 @@
 // pages/index.js
-import Head from 'next/head';
-import EntryForm from '../components/EntryForm';
 
-export default function Home() {
+import Client from "@/components/Name";
+import EntryForm from "../components/EntryForm";
+
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10 px-4">
-      <Head>
-        <title>Society Entries</title>
-        <meta name="description" content="Manage visitor and delivery person entries" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+      <Client />
       <main className="bg-white shadow-lg rounded-lg max-w-md w-full p-8">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Visitor and Delivery Person Entries</h1>
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+          Visitor and Delivery Person Entries
+        </h1>
         <EntryForm />
       </main>
 

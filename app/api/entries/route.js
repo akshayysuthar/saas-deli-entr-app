@@ -1,30 +1,29 @@
-// pages/api/entries.js
+// app/api/entries/route.js
 import clientPromise from "@/lib/mongodb";
 
 export async function POST(req) {
   try {
-    const { name, mobileNo, company, wing, flatNo } = await req.json();
+    const { name, mobileNo, company, wing, flatNo, societyId } =
+      await req.json();
 
-    // Validate the request body
-    if (!name || !mobileNo || !company || !wing || !flatNo) {
+    if (!name || !mobileNo || !company || !wing || !flatNo || !societyId) {
       return new Response(
         JSON.stringify({ message: "All fields are required" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // Connect to MongoDB
     const client = await clientPromise;
     const db = client.db("society");
     const collection = db.collection("entries");
 
-    // Insert the entry into MongoDB
     await collection.insertOne({
       name,
       mobileNo,
       company,
       wing,
       flatNo,
+      societyId,
       timestamp: new Date(),
     });
 
@@ -33,7 +32,7 @@ export async function POST(req) {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error inserting entry:", error);
+    console.error(error);
     return new Response(JSON.stringify({ message: "Internal server error" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -41,13 +40,23 @@ export async function POST(req) {
   }
 }
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const { searchParams } = new URL(req.url);
+    const societyId = searchParams.get("societyId");
+
+    if (!societyId) {
+      return new Response(
+        JSON.stringify({ message: "Society ID is required" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const client = await clientPromise;
     const db = client.db("society");
     const collection = db.collection("entries");
 
-    const entries = await collection.find({}).toArray();
+    const entries = await collection.find({ societyId }).toArray();
 
     return new Response(JSON.stringify({ entries }), {
       status: 200,

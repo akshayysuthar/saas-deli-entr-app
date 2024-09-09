@@ -1,69 +1,30 @@
-// components/EntryForm.js
 "use client";
-// components/EntryForm.js
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
 
 const companies = [
-  "Dmart",
-  "Amazon",
-  "Flipkart",
-  "Others", // Add other companies as needed
+  'Dmart',
+  'Amazon',
+  'Flipkart',
+  'Others'
 ];
 
-const wings = ["Wing A", "Wing B", "Wing C"]; // Example wings
+const wings = ['Wing A', 'Wing B', 'Wing C'];
 
 const flats = {
-  "Wing A": [
-    "101",
-    "102",
-    "103",
-    "104",
-    "201",
-    "202",
-    "203",
-    "204",
-    "301",
-    "302",
-    "303",
-    "304",
-  ],
-  "Wing B": [
-    "101",
-    "102",
-    "103",
-    "104",
-    "201",
-    "202",
-    "203",
-    "204",
-    "301",
-    "302",
-    "303",
-    "304",
-  ],
-  "Wing C": [
-    "101",
-    "102",
-    "103",
-    "104",
-    "201",
-    "202",
-    "203",
-    "204",
-    "301",
-    "302",
-    "303",
-    "304",
-  ],
+  'Wing A': ['101', '102', '103', '104'],
+  'Wing B': ['201', '202', '203', '204'],
+  'Wing C': ['301', '302', '303', '304']
 };
 
 export default function EntryForm() {
-  const [name, setName] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
-  const [company, setCompany] = useState("");
-  const [wing, setWing] = useState("");
-  const [flatNo, setFlatNo] = useState("");
-  const [message, setMessage] = useState("");
+  const { user } = useUser();
+  const [name, setName] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [company, setCompany] = useState('');
+  const [wing, setWing] = useState('');
+  const [flatNo, setFlatNo] = useState('');
+  const [message, setMessage] = useState('');
   const [availableFlats, setAvailableFlats] = useState([]);
 
   useEffect(() => {
@@ -77,23 +38,23 @@ export default function EntryForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/entries", {
-      method: "POST",
+    const response = await fetch('/api/entries', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, mobileNo, company, wing, flatNo }), // Include wing in the request body
+      body: JSON.stringify({ name, mobileNo, company, wing, flatNo, societyId: user.id }),
     });
 
     const result = await response.json();
 
     if (response.ok) {
-      setMessage("Entry submitted successfully!");
-      setName("");
-      setMobileNo("");
-      setCompany("");
-      setWing("");
-      setFlatNo("");
+      setMessage('Entry submitted successfully!');
+      setName('');
+      setMobileNo('');
+      setCompany('');
+      setWing('');
+      setFlatNo('');
     } else {
       setMessage(`Error: ${result.message}`);
     }
