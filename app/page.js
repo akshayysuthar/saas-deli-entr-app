@@ -1,7 +1,8 @@
 // pages/index.js
-
-import Client from "@/components/Name";
+"use client";
+import Client from "@/components/ClientName";
 import EntryForm from "../components/EntryForm";
+import Footer from "@/components/ui/Footer";
 
 export default function HomePage() {
   return (
@@ -13,10 +14,7 @@ export default function HomePage() {
         </h1>
         <EntryForm />
       </main>
-
-      <footer className="mt-8 text-gray-600">
-        <p>&copy; {new Date().getFullYear()} Society Management</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
